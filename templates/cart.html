@@ -1,0 +1,107 @@
+{% extends 'headerandfooter.html' %}
+{% load static %}
+{% block content %}
+
+
+  
+
+
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">Shopping Cart</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Product</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Unit Price</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Delete</th>
+                        </tr>
+                    </thead>
+                    {% for item in items_in_cart %}
+                    <tbody>
+                        <tr>
+                            <td><img src="/static/media/{{item.book.img}}" alt="Product Image" width="50"></td>
+                            <td>{{item.book.name}}</td>
+                            <td>{{item.book.price}}</td>
+                            <td><input type="number" class="form-control" value="{{item.quantity}}"></td>
+                            <td>${{item.total_price}}</td>
+                            <td><button class="btn btn-danger"  data-bs-toggle="modal" data-bs-target="#deletebtn-{{item.id}}"><i class="fa fa-trash"></i></button></td>
+
+                              <!-- Modal -->
+                            <div class="modal fade" id="deletebtn-{{item.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Notification</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    Are you want to delete?
+                                  </div>
+                                  <div class="modal-footer">
+                                      <form action="{% url 'remove_cart_item' item.id %}">
+                                          {% csrf_token %}
+                                          <button type="submit" class="btn btn-success">Delete</button>
+                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                      </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+
+            <div class="mt-4">
+                <a href="{% url 'booklist' %}" class="btn btn-success">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-6 offset-md-6">
+            <h3>Cart Total</h3>
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th scope="row">Subtotal</th>
+                        <td>${{total_cart_price}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Shipping</th>
+                        {% comment %} {% if count > 0 %} {% endcomment %}
+                        {% if total_cart_price > 80 %}
+                        <td ><span style="color: red;"><s>$20</s></span> ${{ shipping_fee }}</td>
+                        {% else %}
+                        <td >$20+${{total_cart_price}}=${{ shipping_fee }}</td>
+                        {% endif %}
+                        {% comment %} {% else %}
+                        <td >$0</td>
+                        {% endif %} {% endcomment %}
+                    </tr>
+                    <tr>
+                        <th scope="row">Total</th>
+                        {% if shipping_fee > 80 %}
+                        <td > ${{ shipping_fee }}</td>
+  
+                        {% endif %}
+                    </tr>
+                </tbody>
+            </table>
+            <form action="{% url 'cart' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" name="checkout_btn" class="btn btn-success">Checkout</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

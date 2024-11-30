@@ -1,0 +1,624 @@
+{% load static %}
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+      * {
+        padding: 0px;
+        margin: 0px;
+      }
+      
+      body {
+        margin-top: 72px;
+      }
+      
+      .navbar-container {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1030;
+        background-color: 	#10898d;
+      }
+      .nav-link.active{
+        color: #032f3c !important;
+      }
+      .main-navbar {
+        margin-right: 15px;
+        margin-left: 15px;
+      }
+      .sidebar {
+        backdrop-filter: blur(10px);
+      }
+      .nav-link{
+        color: white;
+        font-weight:600 !important;
+      }
+      .nav-link,
+      .log-in {
+        font-size: 1.2em;
+        font-weight: 400;
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+      }
+      .search-bar {
+        border-radius: 20px;
+        border: 1px solid black;
+        height: 40px;
+        width: 100%;
+        outline: none;
+        background-color: white;
+        padding: 15px;
+      }
+      .fa.fa-search{
+        font-weight: 700;
+        color: white;
+      }
+      .navbar-brand{
+        margin-right: 150px;
+      }
+      .navbar-brand{
+        color: white;
+      }
+      .navbar-nav .nav-item a:hover{
+        color: #032f3c  ;
+      }
+      .home-page:hover{
+        color: #032f3c  ;
+      }
+      
+      @media (max-width: 992px) {
+        .navbar-nav {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #10898d;
+        }
+        .navbar-brand{
+            margin-right: 0px;
+          }
+      }
+      
+      @media (max-width: 550px) {
+      }
+      
+      @media (max-width: 551px) {
+        body {
+          margin-top: 109px;
+        }
+        .main-navbar {
+            margin-right: 0px;
+            margin-left: 0px;
+          }
+
+        .menu-icon {
+          order: 1;
+          margin-left: 230px;
+        }
+        .search-order {
+          order: 2;
+          flex-grow: 1;
+          margin-top: 2px !important;
+          margin-bottom: 9px !important;
+        }
+      }
+      @media (max-width: 360px) {
+        .menu-icon {
+          margin-left: 30px;
+        }
+      }
+
+
+
+
+
+
+
+
+
+      {% comment %} @media (max-width: 1560px) {
+        .login-form-section ,.register-form-section {
+          width: ;
+        }
+      }
+      
+      @media (max-width: 1297px) {
+        .login-form-section ,.register-form-section {
+          margin: 0px 25px;
+        }
+      }
+      
+      @media (max-width: 1047px) {
+        .login-form-section ,.register-form-section {
+          margin: 0px 17px;
+        }
+      } {% endcomment %}
+      
+      @media (max-width: 768px) {
+        .login-form-section ,.register-form-section {
+          width: 400px;
+        }
+      }
+      
+      @media (max-width: 671px) {
+        .login-form-section ,.register-form-section {
+          margin: 0px 10px;
+        }
+      }
+      
+      @media (max-width: 550px) {
+        .login-form-section ,.register-form-section {
+          margin: 0px;
+        }
+      }
+
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar navbar-container navbar-expand-lg" >
+        <div class="container-fluid main-navbar d-flex justify-content-between">
+          <a class="navbar-brand fs-4 " href="{% url 'homepage' %}"><img src="{% static 'assets/images/logo.png' %}" height="60px" width="60px" alt="logo" style="border-top-left-radius: 10px;border-bottom-left-radius: 10px;border-bottom-right-radius: 10px;"></a>
+          <form action="{% url 'booklist' %}" method="get" class="d-flex my-2 search-order" role="search">
+            {% csrf_token %}
+            <input class="search-bar" type="search" name="searched-data" value="{{searched}}" placeholder="Search" required /> 
+            <button class="btn " style="border: white 1px solid; border-radius: 30px;" type="submit"><i class="fa fa-search"></i></button>
+          </form>
+          <button class="navbar-toggler menu-icon shadow-none border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation"><i class="fa-solid fa-bars text-white"></i></button>
+
+          <div style="background-color: #10898d;" class="offcanvas sidebar offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header  border-bottom">
+              <h5 class="offcanvas-title text-white" id="offcanvasNavbarLabel"><img src="{% static 'assets/images/logo.png' %}" height="60px" width="60px" alt="logo" style="border-top-left-radius: 10px;border-bottom-left-radius: 10px;border-bottom-right-radius: 10px;"></h5>
+              <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item">
+                  <a  class="nav-link home-page {% if active == "home" %}active{% endif %}" aria-current="page" href="{% url 'homepage' %}">Home</a>
+                </li>
+
+                <style>
+
+                    .category-main{
+                        position: relative;
+                    }
+                    .category-links{
+                        padding: 0;
+                        width: 200px;
+                        
+                    }
+                    .category-dropdown{
+                        position: absolute;
+                        display: flex;
+                        justify-content:space-between;
+                        align-items:center;
+                        background-color: 	#10898d;
+                        width: 700px;
+                        right: 0px;
+                        top: 55px;
+                        visibility: hidden;
+                        padding: 40px 20px 20px 20px;
+                        transition: ease 0.3s;
+                    }
+                    .category-main:hover .category-dropdown{
+                        visibility: visible;
+                        top: 45px;
+                    }
+                    .category-list-links{
+                        list-style: none;
+                    }
+                    .category-list-links .category-list{
+                        text-decoration: none;
+                        color: white;
+                    }
+                    .category-list-links .category-list:hover{
+                        background-color: rgba(0, 0, 0, 0.1);
+                        color: 	#032f3c;
+                    }
+                    .category-main:hover .category-name{
+                      color: #032f3c;
+                    }
+                    @media(max-width:1024px){
+                        .category-dropdown{
+                            width: 600px;
+                            padding: 40px 20px 20px 20px;
+                        }
+                    }
+                    @media(max-width:992px){
+                        .category-dropdown{
+                            flex-direction: column;
+                            width: 220px;
+                            top: 45px;
+                            padding: 10px 10px 10px 10px;
+                            height: 400px;
+                            align-items: center;
+                            overflow-y: auto;
+                            scrollbar-width: none;
+                            scroll-snap-type:mandatory;
+                            scroll-behavior: smooth;
+                            z-index: 99;
+                            left: -65px;
+                            border: 0.2px solid whitesmoke;
+                        }
+                        .category-main:hover .category-dropdown{
+                            visibility: visible;
+                            position: absolute;
+                            top: 35px;
+                            z-index: 99;
+                            
+                        }
+
+                    }
+
+                </style>
+
+
+                <li class="nav-item category-main">
+                  <a class="nav-link category-name" >Category</a>
+                    <div class="cotegory-row">
+                        <div class="category-dropdown">
+                            <div class="category-columns">
+                                {% comment %} <header class="p-2 fw-bolder" style="color: white;">GENRE</header> {% endcomment %}
+                                <ul class="category-links justify-content-end flex-grow-1">
+                                    <li class="category-list-links nav-item"><a href="{% url 'filterlist' genre="Romance" %}" class="category-list nav-link" href="">Romance</a></li>
+                                    <li class="category-list-links nav-item"><a href="{% url 'filterlist' genre="Fiction" %}" class="category-list nav-link" href="">Fiction</a></li>
+                                    <li class="category-list-links nav-item"><a href="{% url 'filterlist' genre="Nonfiction" %}" class="category-list nav-link" href="">Nonfiction</a></li>
+                                    <li class="category-list-links nav-item"><a href="{% url 'filterlist' genre="Science" %}" class="category-list nav-link" href="">Science</a></li>
+                                    <li class="category-list-links nav-item"><a href="{% url 'filterlist' genre="Mathematics" %}" class="category-list nav-link" href="">Mathematics</a></li>
+                                    <li class="category-list-links nav-item"><a href="{% url 'filterlist' genre="History" %}" class="category-list nav-link" href="">History</a></li>
+                                </ul>
+                            </div>
+                            <div class="category-columns">
+                                <ul class="category-links">
+                                    <li class="category-list-links nav-item"><a href="{% url 'filterlist' genre="Politics" %}" class="category-list nav-link" href="">Politics</a></li>
+                                    <li class="category-list-links nav-item"><a href="{% url 'filterlist' genre="Economics" %}" class="category-list nav-link" href="">Economics</a></li>
+                                    <li class="category-list-links nav-item"><a href="{% url 'filterlist' genre="Sports" %}" class="category-list nav-link" href="">Sports</a></li>
+                                    <li class="category-list-links nav-item"><a href="{% url 'filterlist' genre="Fantasy" %}" class="category-list nav-link" href="">Fantasy</a></li>
+                                    <li class="category-list-links nav-item"><a href="{% url 'filterlist' genre="Mystery" %}" class="category-list nav-link" href="">Mystery</a></li>
+                                    <li class="category-list-links nav-item"><a href="{% url 'filterlist' genre="Science Fiction" %}" class="category-list nav-link" href="">Science Fiction</a></li>
+                                </ul>
+                            </div>
+                            <div class="category-resourse">
+                                {% comment %} <header class="p-2 fw-bolder" style="color: white;">Resource</header> {% endcomment %}
+                                <ul class="category-links">
+                                    <li class="category-list-links nav-item"><a href="{% url 'filterlist' genre="Adventure" %}" class="category-list nav-link" href="">Adventure</a></li>
+                                    <li class="category-list-links nav-item"><a href="{% url 'filterlist' genre="Comics" %}" class="category-list nav-link" href="">Comics</a></li>
+                                    <li class="category-list-links nav-item"><a href="{% url 'filterlist' genre="Young Adult" %}" class="category-list nav-link" href="">Young Adult</a></li>
+                                    <li class="category-list-links nav-item"><a href="{% url 'filterlist' genre="Self-Help" %}" class="category-list nav-link" href="">Self-Help</a></li>
+                                    <li class="category-list-links nav-item"><a href="{% url 'filterlist' genre="Photography" %}" class="category-list nav-link" href="">Photography</a></li>
+                                    <li class="category-list-links nav-item"><a href="{% url 'filterlist' genre="Medicine" %}" class="category-list nav-link" href="">Medicine</a></li>
+                                </ul>
+                            </div>
+                          </div>
+                    </div>
+                </li>
+                {% comment %} <li class="nav-item">
+                  <a class="nav-link " href="{% url 'aboutus' %}">About us</a>
+                </li> {% endcomment %}
+                <li class="nav-item">
+                  <a class="nav-link {% if active == "contact" %}active{% endif %}" href="{% url 'contactus' %}">Contact</a>
+                </li>
+
+                <style>
+                    .user-list{
+                        position: absolute;
+                        background-color: #10898d;
+                        top: 45px;
+                        width: 200px;
+                        right: 0px;
+                        padding: 0;
+                        list-style: none;
+                        visibility: hidden;
+                        transition:  ease  0.3s;
+                    }
+                    .user-list li a{
+                        text-decoration: none;
+                        line-height: 30px;     
+                        color: white;                   
+                    }
+                    .user-list li a:hover{
+                        background-color: rgba(0, 0, 0, 0.1);
+                        color: #032f3c;
+                    }
+                    .nav-item-user{
+                        position: relative;
+                    }
+                    .nav-item-user a{
+                        cursor: pointer;
+                    }
+                    .nav-item-user:hover .user-list{
+                        visibility: visible;
+                        top: 35px;
+                    }
+                    .nav-item-user:hover .logged-user-name{
+                      color: #032f3c;
+                    }
+                    @media(max-width:992px){
+                        .user-list li a{
+                            margin-top: 0 !important;
+                        }
+                        .user-list{
+                            right: -66px;
+                            width: 210px;
+                            border: 0.2px solid whitesmoke;
+                        }
+                    }
+                </style>
+                {% if user.is_authenticated %}
+                <li class="nav-item nav-item-user">
+                    <a class="nav-link logged-user-name">{{usernme}}</a>
+                    <ul class="user-list  justify-content-end flex-grow-1">
+                        <li class="nav-item"><a class="nav-link" style="margin-top: 25px; padding-left: 20px;" href="{% url 'wishlist' %}">Wishlist</a></li>
+                        <li class="nav-item"><a class="nav-link" style="padding-left: 20px;" href="{% url 'logout' %}">Logout</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link " style="cursor: pointer;" id="openLogin">Login</a>
+                  </li>
+                {% endif %}
+
+              </ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <style>
+      .login-page{
+        position: fixed;
+        z-index: 99;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: calc(100vh - 72px);
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .login-form-section{
+        background-color: #F8F8F8;
+        width: 500px;
+        height: auto;
+        position: relative;
+      }
+      label{
+        font-weight: 500;
+      }
+      .close-icon{
+        position: absolute;
+        top: 25px;
+        right: 25px;
+        cursor: pointer; 
+        z-index: 1;
+      }
+    </style>
+
+    {% comment %} <div class=" " > {% endcomment %}
+      <div class="login-page" id="mainLoginPage">
+          <div class=" p-5  login-form-section" style=" border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <span class="close-icon" id="modalClose"><i class="fa-solid fa-x"></i></span>
+              <h3 class="text-center mb-2">Login to view books</h3>
+              <p class="text-center mb-4" style="color: #10898d;">Access our library with a free account</p>
+              <form action="{% url 'loginpage' %}" method="post">   
+                  {% csrf_token %}             
+                  <div class="mb-3">
+                      <label for="email" class="form-label">Email</label>
+                      <input type="email" name="email" class="form-control" id="email" required>
+                  </div>
+                  <div class="mb-3">
+                      <label for="password" class="form-label">Password</label>
+                      <input type="password" name="password" class="form-control" id="password" required>
+                  </div>
+                  <button type="submit" class="btn  w-100" style="background-color: #10898d;color: white;font-weight: 500;">LOGIN</button>
+                  <div class="pt-2">
+                      <span>Don't have an account?</span> <a id="openRegister" style="color: #10898d;cursor: pointer; text-decoration: none;">Sign up</a>
+                  </div>
+              </form>
+          </div>
+      </div>
+  {% comment %} </div> {% endcomment %}
+  <script>
+    const openModal = document.getElementById("openLogin");
+    const modal = document.getElementById("mainLoginPage");
+    const modalClose = document.getElementById("modalClose");
+    openModal.addEventListener("click",() => {
+      modal.style.display = "flex";
+      document.body.style.overflow = "hidden";
+    });
+    modalClose.addEventListener("click",() => {
+      modal.style.display = "none"
+      document.body.style.overflow = "auto";
+    });
+    window.addEventListener("click",(event) => {
+      if(event.target === modal){
+        modal.style.display   = "none";
+        document.body.style.overflow = "auto";
+      }
+    })
+  </script>
+  <style>
+    .register-page{
+      position: fixed;
+      z-index: 99;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: calc(100vh - 72px);
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+    .register-form-section{
+      background-color: #F8F8F8;
+      width: 500px;
+      height: auto;
+      position: relative;
+    }
+
+
+    @media (max-width: 768px) {
+      .login-form-section ,.register-form-section {
+        width: 400px;
+      }
+    }
+    
+    @media (max-width: 671px) {
+      .login-form-section ,.register-form-section {
+        width: 380px;
+      }
+    }
+    
+    @media (max-width: 550px) {
+      .login-form-section ,.register-form-section {
+        width: 300px;
+      }
+    } 
+  </style>
+
+    <div class="register-page" id="mainRegisterPage">
+        <div class="col-12 col-sm-10 col-md-8 col-lg-6 p-5 register-form-section" style=" border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+          <span class="close-icon" id="closeRegister"><i class="fa-solid fa-x"></i></span>
+            <h3 class="text-center mb-4">Registration</h3>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="fullName" class="form-label">Full Name</label>
+                    <input type="text" name="fullname" class="form-control" id="fullNameReg" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" id="emailReg" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" id="passwordReg" required>
+                </div>
+                <button type="submit" style="background-color: #10898d;color: white;font-weight: 500;" class="btn w-100">Create account</button>
+                <div class="pt-2">
+                    <span>Already have an account?</span> <a id="openLoginPage" style="color: #10898d;cursor: pointer; text-decoration: none;">Sign in</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+      const openRegister = document.getElementById("openRegister");
+      const modalRegister = document.getElementById("mainRegisterPage");
+      const closeRegister = document.getElementById("closeRegister");
+      const openLoginPage = document.getElementById("openLoginPage");
+      openRegister.addEventListener("click",() => {
+        modalRegister.style.display = "flex"
+        modal.style.display = "none";
+      });
+      closeRegister.addEventListener("click",() => {
+        modalRegister.style.display = "none"
+      });
+      window.addEventListener("click",(event) => {
+        if(event.target === modalRegister){
+         modalRegister.style.display = "none"
+        }
+      });
+      openLoginPage.addEventListener("click",() => {
+        modal.style.display = "flex";
+        modalRegister.style.display = "none";
+      })
+      function toggleLogin(){
+        modal.style.display = "flex";
+        modalRegister.style.display = "none";
+      }
+    </script>
+
+    {% block content %}
+
+    {% endblock %}
+
+    <footer class="bg-dark py-4" style="color: gray;">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4 mb-4">
+            <a class="navbar-brand" href="{% url 'homepage' %}"><img src="{% static 'assets/images/logo.png' %}" height="60px" width="60px" alt="logo" style="border-top-left-radius: 10px;border-bottom-left-radius: 10px;border-bottom-right-radius: 10px;" /></a>
+            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sit necessitatibus adipisci consequuntur porro blanditiis minus vitae similique delectus dolorem? Illo tenetur sed ducimus, tempora fugit eos? Harum saepe praesentium illum..</p>
+          </div>
+
+          {% comment %} <div class="col-md-4 mb-4">
+            <h4 class="text-white">Quick Access</h4>
+            <ul class="list-unstyled">
+              <li>
+                <a href="{% url 'homepage' %}" class="quick-linksquick-links text-decoration-none" style="color: gray;">Home</a>
+              </li>
+              <li>
+                <a href="{% url 'cart' %}" class="quick-links text-decoration-none" style="color: gray;">Cart</a>
+              </li>
+              <li>
+                <a href="#" class="quick-links text-decoration-none" style="color: gray;">Wishlist</a>
+              </li>
+               <li>
+                <a href="{% url 'aboutus' %}" class="quick-links text-decoration-none" style="color: gray;">About Us</a>
+              </li> 
+              <li>
+                <a href="{% url 'contactus' %}" class="quick-links text-decoration-none" style="color: gray;">Contact</a>
+              </li>
+            </ul>
+          </div> {% endcomment %}
+          <style>
+            .fa-brands{
+              color: white;
+              transition: all 0.2s ease-in;
+              font-size: 1.4em;
+            }
+            .fa-brands:hover{
+              color: #74faaf;
+            }
+          </style>
+
+          <div class="col-md-4 mb-4">
+            <h4 class="text-white">Contact Us</h4>
+            <p>1884 George Avenue Mobile, AL 36603</p>
+            <div>
+              <a href="https://www.linkedin.com/in/shiva-sankar-qw/" class="social_medias me-3"><i class="fa-brands fa-linkedin"></i></a>
+              <a href="https://github.com/shiva-sankar-dev" class="social_medias me-3"><i class="fa-brands fa-github"></i></a>
+              <a href="https://www.instagram.com/shivah_________/" class="social_medias me-3"><i class="fa-brands fa-instagram"></i></a>
+              {% comment %} <a href="https://in.linkedin.com/" class="social_medias"><i class="fa fa-linkedin"></i></a> {% endcomment %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="justify-content-center">
+        <p class="ps-5">©2024 Book Store All Rights Reserved.</p>
+      </div>
+    </footer>
+  <script>
+  const csrftoken = "{{ csrf_token }}";
+      
+  function toggleWishlist(openlibraryKey, title, author, coverId) {
+      $.ajax({
+          url: "{% url 'wishlist_toggle' %}",
+          type: "POST",
+          data: {
+              "openlibrary_key": openlibraryKey,
+              "title": title,
+              "author": author,
+              "cover_id": coverId,
+              "csrfmiddlewaretoken": csrftoken
+          },
+          success: function(response) {
+              const icon = document.getElementById(`wishlist-icon-${response.openlibrary_key}`);
+              if (response.added) {
+                  icon.style.color = "red";
+              } else {
+                  icon.style.color = "gray";
+              }
+          }
+      });
+  }
+  
+  </script>        
+  
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

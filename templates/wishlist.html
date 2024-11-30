@@ -1,0 +1,188 @@
+{% extends 'headerandfooter.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .wishlist{
+        min-height: 100vh;
+        margin: 40px 30px;
+    }
+    .wishlist-heading{
+        padding-top: 20px;
+        margin-bottom: 20px;
+    }
+    .wishlist-table-border{
+        display: flex;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        scroll-snap-type: x mandatory;
+    }
+    .wishlist-table{
+        border: 1px solid #c2c2c2;
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 3px;
+    }
+    .wishlist-table tbody tr td{
+        padding: 6px;
+        min-height: 250px;
+    }
+    .wishlist-table tbody tr td:nth-child(1){
+        width: 150px;
+    }
+    .wishlist-table tbody tr td:nth-child(1) img{
+        width: 150px;
+        height: 237px !important;
+    }
+    .wishlist-table tbody tr td:nth-child(2){
+        width: 100%;
+        display: block;
+        flex-wrap: wrap;
+        word-wrap: break-word; 
+        white-space: normal;    
+    }
+    .wishlist-table tbody tr td:nth-child(2) ul li{
+        list-style: none;
+    }
+    .wishlist-table tbody tr td:nth-child(2) ul li:nth-child(1){
+        font-weight: 600;
+    }
+    .wishlist-table tbody tr td:nth-child(3){
+        width: 150px;
+        text-align: center; /* Centers inline elements like buttons horizontally */
+        vertical-align: middle; /* Centers content vertically in the cell */
+    }
+    .remove-wishlist-btn{
+        background-color: #10898d;
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        padding: 8px 20px;
+        border-radius: 50px;
+        cursor: pointer;
+    }
+    .remove-wishlist-btn:hover{
+        background-color: #032f3c ;
+    }
+    .wishlist-table tbody tr:hover td{
+        background-color: #e0e0e0   ;
+    }
+    .wishlist-table tbody tr:nth-child(odd){
+        background-color: #F8F8F8;
+    }
+    .wishlist-table tbody tr:nth-child(even){
+        background-color: #ebebeb;
+    }
+    @media (max-width: 1560px) {
+        .wishlist {
+        }
+      }
+      
+      @media (max-width: 1297px) {
+        .wishlist {
+          margin: 0px 25px;
+        }
+      }
+      
+      @media (max-width: 1047px) {
+        .wishlist {
+          margin: 0px 17px;
+        }
+      }
+      
+      @media (max-width: 768px) {
+        .wishlist {
+          margin: 0px 15px;
+        }
+      }
+      
+      @media (max-width: 671px) {
+        .wishlist {
+          margin: 0px 10px;
+        }
+      }
+      
+      @media (max-width: 550px) {
+        .wishlist {
+          margin: 0px;
+        }
+      }
+      @media (max-width: 768px) {
+        .wishlist-table-border {
+            display: flex;
+            overflow-x: auto; /* Enable horizontal scrolling */
+            scroll-behavior: smooth; /* Smooth scrolling */
+            scrollbar-width: thin; /* Make scrollbar thin for better appearance */
+    }
+
+    .wishlist-table {
+        min-width: 700px; /* Ensure the table has a width that requires scrolling */
+    }
+    .wishlist-table tbody tr td:nth-child(2){
+        font-size: 0.9em;
+    }
+
+}
+</style>
+
+<div class="wishlist">
+    <div class="wishlist-heading">
+        <h3>WISHLIST</h3>
+    </div>
+    <div class="wishlist-table-border">
+        <table class="wishlist-table">
+            <tbody>
+                {% for item in wishlist_items %}
+                <tr id="wishlist-item-{{ item.openlibrary_key|escapejs }}">
+                    <td>
+                        <a href="{% url 'details' item.openlibrary_id %}" target="_blank"><img src="https://covers.openlibrary.org/b/id/{{ item.cover_id }}-L.jpg" alt=""></a>
+                    </td>
+                    <td>
+                        <ul>
+                            <li>{{ item.title }}</li>
+                            <li>{{ item.author }}</li>
+                            <li>{{ item.description }}</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <a href="javascript:void(0);" onclick="removeItem('{{ item.openlibrary_key }}')" class="remove-wishlist-btn">Remove</a>
+                    </td>
+                </tr>
+                {% endfor %}           
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<script>
+    const csrftoken = '{{ csrf_token }}';
+
+    // Define sanitizeId function first
+    function sanitizeId(id) {
+        return id.replace(/[^a-zA-Z0-9-_]/g, '-'); // Replace invalid characters with '-'
+    }
+
+    function removeItem(bookId) {
+        const sanitizedId = sanitizeId(bookId); // Call sanitizeId here
+        $.ajax({
+            url: "{% url 'wishlist' %}",
+            type: "POST",
+            data: {
+                "openlibrary_key": bookId,
+                "csrfmiddlewaretoken": csrftoken,
+            },
+            success: function(response) {
+                if (response.success) {
+                    $(`#wishlist-item-${sanitizedId}`).remove(); // Use sanitizedId
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error removing item:", error);
+            }
+        });
+    }
+</script>
+
+
+{% endblock %}

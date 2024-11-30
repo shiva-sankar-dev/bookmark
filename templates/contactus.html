@@ -1,0 +1,170 @@
+{% extends 'headerandfooter.html' %}
+{% load static %}
+{% block content %}
+
+
+<style>
+     .contact-main{
+        margin-bottom: 40px;
+        margin: 20px 30px;
+    } 
+     .contact-heading h3{
+        margin-top: 102px;
+        margin-bottom: 20px;
+     }
+     .contact-description p{
+        font-size: 1.3em;
+     }
+     .contact-form{
+        margin-top: 50px;
+        display: flex;
+        gap: 30px;
+     }
+     .contact-img-left img{
+        height: 550px;
+     }
+     .contact-form-right{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+     }
+     .contact-form-input{
+        height: 45px;
+        margin-bottom: 30px;
+        padding: 10px;
+     }
+     .contact-form-textarea{
+        height: 200px;
+        margin-bottom: 40px;
+        padding: 10px;
+     }
+     .submit-button{
+
+     }
+     .contact-form-button{
+        height: 48px;
+        width: 150px;
+        color: white;
+        background-color: #10898d;
+        border: none;
+        font-weight: 900;
+
+     }
+     @media(max-width:1400px){
+        .contact-img-left img{
+            height: 450px;
+         }
+     }
+     @media(max-width:992px){
+        .contact-img-left img{
+            height: 350px;
+         }
+     }
+     @media(max-width:768px){
+        .contact-main {
+            margin: 20px 15px;
+          }
+        .contact-form{
+            flex-direction: column;
+        }
+        .contact-img-left img{
+            width: 100%;
+            height: auto;
+         }
+         .contact-description p{
+            font-size: 1em;
+         }
+     }
+
+
+     @media (max-width: 1297px) {
+        .contact-main {
+          margin: 20px 25px;
+        }
+      }
+      
+      @media (max-width: 1047px) {
+        .contact-main {
+          margin: 20px 17px;
+        }
+      }
+
+      @media (max-width: 671px) {
+        .contact-main {
+          margin: 20px 10px;
+        }
+      }
+</style>
+
+<div class="contact-main ">
+    <div class="contact-heading">
+        <h3>CONTACT US</h3>
+    </div>
+    <div class="contact-description">
+        <p>Should you have any additional questions, we’ll be more than glad to settle them for you! Just get in touch with us via any of the following contacting options:</p>
+    </div>
+    <div class="contact-map">
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.835434509914!2d144.9630579153167!3d-37.81410797975159!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf5774e3787f4a1b0!2sFederation%20Square!5e0!3m2!1sen!2sau!4v1603682968855!5m2!1sen!2sau"
+            width="100%"
+            height="450"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy">
+        </iframe>
+    </div>
+        <div class="contact-form">
+            <div class="contact-img-left">
+                <img src="{% static 'assets/images/contact_img.jpg' %}" alt="">
+            </div> 
+            <div class="contact-form-right">
+                <h3>SEND US A MESSAGE</h3>
+                    <label for="username">User Name: *</label>
+                    <input class="contact-form-input" type="text" name="name" id="user_name">
+                    <label for="email">Your E-mail: *</label>
+                    <input class="contact-form-input" type="text" name="email" id="user_email">
+                    <label for="message">Your Message: *</label>
+                    <textarea class="contact-form-textarea" name="sending-message" id="user_message"></textarea>
+                    <div class="submit-button">
+                        <button type="button" onclick="submit_message()" name="contact_btn" class="contact-form-button">SUBMIT</button><div id="display-message"></div>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const name = document.getElementById("user_name")
+        const email = document.getElementById("user_email")
+        const message = document.getElementById("user_message")
+        const displayMessage = document.getElementById("display-message")
+
+        function submit_message(){
+            $.ajax({
+                url:"{% url 'contactus' %}",
+                type:"POST",
+                data:{
+                    "name":name.value,
+                    "email":email.value,
+                    "sending-message":message.value,
+                    "csrfmiddlewaretoken":'{{ csrf_token }}'
+                },
+                success:function(response){
+                    if(response.success){
+                        displayMessage.innerHTML = `<p style='color:green;'>${response.message}</p>`
+                    }
+                    else{
+                        displayMessage.innerHTML = `<p style='color:red;'>${response.message}</p>`
+                    }
+                    name.value="";
+                    email.value="";
+                    message.value="";
+                },
+                error:function(){
+                    displayMessage.innerHTML = "<p style = 'color:red'>something went wrong , please try again</p>"
+                }
+            });
+        }
+    </script>
+
+
+{% endblock %}

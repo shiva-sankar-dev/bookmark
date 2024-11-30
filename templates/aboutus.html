@@ -1,0 +1,57 @@
+{% extends 'headerandfooter.html' %}
+{% load static %}
+{% block content %}
+
+
+  
+
+<div class="about-us-section" style="padding: 50px; background-color: #f9f9f9;">
+    <div class="container" style="max-width: 900px; margin: 0 auto; text-align: center;">
+        <h1 style="font-size: 36px; color: #333; margin-bottom: 20px;">About Us</h1>
+        <p style="font-size: 18px; color: #555; line-height: 1.8; margin-bottom: 30px;">
+            Welcome to our company! We are passionate about delivering top-quality products and services to our clients. 
+            Our team of dedicated professionals works tirelessly to ensure that we meet and exceed customer expectations in 
+            everything we do. With years of experience in the industry, we believe in innovation, commitment, and building 
+            lasting relationships with our customers.
+        </p>
+        <div class="values" style="display: flex; justify-content: space-between; margin-bottom: 30px;">
+            <div style="flex: 1; margin-right: 10px; padding: 20px; background-color: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <h3 style="color: #333; font-size: 22px; margin-bottom: 10px;">Our Mission</h3>
+                <p style="color: #777; font-size: 16px; line-height: 1.6;">
+                    To deliver exceptional value and quality through innovative solutions, while maintaining the highest standards of integrity and professionalism.
+                </p>
+            </div>
+            <div style="flex: 1; margin-left: 10px; padding: 20px; background-color: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <h3 style="color: #333; font-size: 22px; margin-bottom: 10px;">Our Vision</h3>
+                <p style="color: #777; font-size: 16px; line-height: 1.6;">
+                    To be recognized as a leader in our industry, known for excellence, innovation, and customer satisfaction.
+                </p>
+            </div>
+        </div>
+        <div class="team" style="background-color: #f1f1f1; padding: 40px;">
+            <h2 style="color: #333; font-size: 28px; margin-bottom: 20px;">Meet Our Team</h2>
+            <p style="color: #555; font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+                Our diverse and talented team brings together a wealth of experience and expertise to drive our success.
+            </p>
+            <div style="display: flex; justify-content: space-between;">
+                <div style="flex: 1; padding: 20px;">
+                    <img src="{% static 'assets/images/users/blog_uer_1.jpg' %}" alt="Team Member" style="width: 150px; height: 200px; border-radius: 50%; margin-bottom: 10px;">
+                    <h4 style="color: #333; font-size: 18px;">Jane Doe</h4>
+                    <p style="color: #777; font-size: 16px;">CEO & Founder</p>
+                </div>
+                <div style="flex: 1; padding: 20px;">
+                    <img src="{% static 'assets/images/users/blog_uer_3.jpg' %}" alt="Team Member" style="width: 150px; height: 200px; border-radius: 50%; margin-bottom: 10px;">
+                    <h4 style="color: #333; font-size: 18px;">John Smith</h4>
+                    <p style="color: #777; font-size: 16px;">Chief Technical Officer</p>
+                </div>
+                <div style="flex: 1; padding: 20px;">
+                    <img src="{% static 'assets/images/users/blog_uer_2.jpg' %}" alt="Team Member" style="width: 150px; height: 200px; border-radius: 50%; margin-bottom: 10px;">
+                    <h4 style="color: #333; font-size: 18px;">Emily Brown</h4>
+                    <p style="color: #777; font-size: 16px;">Marketing Director</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,206 @@
+{% extends 'headerandfooter.html' %}
+{% load static %}
+{% block content %}
+
+
+<style>
+    .card-text {
+        display: -webkit-box;
+        -webkit-line-clamp: 1; /* Limits text to 4 lines */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .card-container-resp {
+        display: grid;
+        align-items: center;
+        justify-content: center;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr; /* Default to 4 columns */
+    }
+
+    
+    .card-main{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .every-card{
+        width: 14rem;
+        border: none;
+        transition: ease 0.3s;
+
+
+    }
+
+    .every-card:hover{
+        transform: translateY(-6px);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07),
+        0 -2px 12px rgba(0, 0, 0, 0.07),
+        2px 0 12px rgba(0, 0, 0, 0.07),
+        -2px 0 12px rgba(0, 0, 0, 0.07);
+    }
+    .card-body{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .card-text{
+        margin: 0;
+    }
+    .wishlist-icon{
+        text-decoration: none;
+        font-size: 1.6em;
+      }
+    
+    @media (max-width: 1560px) {
+        .card-container-resp {
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr; /* 3 columns for medium screens */
+        }
+    }
+    
+    @media (max-width: 1297px) {
+        .card-container-resp {
+            grid-template-columns: 1fr 1fr 1fr 1fr; /* 2 columns for smaller screens */
+
+        }
+
+    }
+    
+    
+    @media (max-width: 1047px) {
+        .card-container-resp {
+            grid-template-columns: 1fr 1fr 1fr; /* 1 column for very small screens */
+        }
+
+    }
+    
+    @media (max-width: 768px) {
+        .card-container-resp {
+            grid-template-columns: 1fr 1fr 1fr; /* 1 column for very small screens */
+        }
+
+        
+        .card .card-body h5{
+            margin-bottom: 0;
+        }
+        .card .card-body p{
+        }
+
+    .every-card{
+        width: 12.1rem;
+
+    }
+    }
+    
+    
+    @media (max-width: 671px) {
+        .card-container-resp {
+            grid-template-columns: 1fr 1fr; /* 1 column for very small screens */
+        }
+
+        .card .card-body h5{
+            font-size: 0.91em;
+        }
+        .card .card-body p{
+            font-size: 0.9em;
+        }
+
+            
+    .every-card{
+        width: 15rem;
+
+    }
+    }
+    
+    @media (max-width: 550px) {        
+    .every-card{
+        width: 10rem;
+
+    }
+
+    .card-body{
+        margin-bottom: 0px;
+    }
+    .card-text{
+        margin: 3px;
+    }
+    .card-img-top{
+        margin-bottom: 3px;
+
+    }
+    }
+    @media (max-width: 388px) {        
+    .every-card{
+        width: 8.5rem;
+        margin: 9px !important;
+
+
+    }
+
+    }
+
+    </style>
+  <div class=" mt-5 mb-5 card-main" >
+    <div class="  card-container-resp">
+
+        {% for books in searched_books %}
+            <div class="card position-relative  every-card " style="margin: 12px;">
+                <a href="{% url 'details' books.openlibrary_id %}" target="_blank">
+                    <img loading="lazy" src="https://covers.openlibrary.org/b/id/{{ books.cover_id }}-L.jpg" class="card-img-top book-cover-img mb-3" alt="...">
+                </a>
+                <div class="card-body ms-3" style="padding: 0;">
+                    <h5 class="card-title">{{ books.title }}</h5>
+                    {% comment %} <p class="card-text">{{ books.description}}</p> {% endcomment %}
+                    <p class="card-text">{{ books.author}}</p>
+
+                </div>
+                <div class="icon-container position-absolute pe-2" style="right: 20px; top: 20px;">
+                    {% if user.is_authenticated %}
+                    <a href="javascript:void(0);" class="wishlist-icon" onclick="toggleWishlist('{{ books.openlibrary_key }}', '{{ books.title }}', '{{ books.author }}', {{ books.cover_id }})">
+                      <i id="wishlist-icon-{{ books.openlibrary_key }}" class="fa fa-heart" style="color: {% if books.in_wishlist %}red{% else %}gray{% endif %};"></i>
+                  </a>
+                  {% else %}
+                    <a href="javascript:void(0);" class="wishlist-icon" onclick="toggleLogin()">
+                      <i id="wishlist-icon-" class="fa fa-heart" style="color: gray;"></i>
+                  </a>
+                  {% endif %}
+                  </div>
+            </div>
+        {% endfor %}
+
+        {% for book in filtered_books %}
+        <div class="card position-relative every-card" style="margin: 12px;">
+            <a href="{% url 'details' book.openlibrary_id %}" target="_blank">
+                <img loading="lazy" src="https://covers.openlibrary.org/b/id/{{ book.cover_id }}-L.jpg" class="card-img-top book-cover-img mb-3" alt="{{ book.title }}">
+            </a>
+            <div class="card-body ms-3" style="padding: 0;">
+                <h5 class="card-title">{{ book.title }}</h5>
+                <p class="card-text">{{ book.author }}</p>
+            </div>
+            <div class="icon-container position-absolute pe-2" style="right: 20px; top: 20px;">
+                {% if user.is_authenticated %}
+                <a href="javascript:void(0);" onclick="toggleWishlist('{{ book.openlibrary_key }}', '{{ book.title }}', '{{ book.author }}', {{ book.cover_id }})" class="icon-link wishlist-icon">
+                    <i id="wishlist-icon-{{ book.openlibrary_key }}" class="fa fa-heart" style="color: {% if book.in_wishlist %}red{% else %}gray{% endif %};"></i>
+                </a>
+                {% else %}
+                <a href="javascript:void(0);" class="wishlist-icon" onclick="toggleLogin()">
+                  <i id="wishlist-icon-" class="fa fa-heart" style="color: gray;"></i>
+              </a>
+              {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+  </div>
+
+
+
+  
+
+
+{% endblock %}
